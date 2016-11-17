@@ -1,0 +1,58 @@
+= Kafka Docker Image - in progress
+
+== Setup
+
+* Setup -
+** in vBox or vmWare Fusion, create an Ubuntu Server 16 VM
+** for networking, use 'Share with my Mac' where the Mac serves as a NAT gateway for the VM
+** log in to that VM from your Mac's terminal `ssh user@<VM_EXTERNAL_IP>`
+** install docker-engine on that VM using the instructions from the Docker website
+** clone this repo into that virtual machine.
+** from that machine, run `ifconfig` and note the `ens33` network interface, which should be the externally-accessible ip address.
+From here on, that IP will be referred to as `$EXT_IP`
+** open server.properties and update the IP address in 'advertised.listners' and 'advertised.host.name' to that external-facing IP (aka _docker host_)
+** from the root directory of the repo, build the docker image
+----
+sudo docker build -t test-kafka-image .
+----
+
+== Running
+* From your ssh session into the VM:
+** assuming you previously set the environment variable $EXT_IP...
+----
+$EXT_IP=<your vm external ip>
+sudo docker run -p $EXT_IP:9092:9092 -p $EXT_IP:2181:2181 -d test-kafka-image
+----
+** at this point it should be running.  Now we test.
+
+== Testing
+* download
+** From your mac...
+** download the _2.11-0.10.0.0_ version of kafka.  The exact version is _very important_.
+** unzip and navigate to $KAFKA/bin
+** `$EXT_IP=<your vm external ip>`
+** `./kafka-topics.sh --create --topic testtopic --zookeeper $EXT_IP:2181 --partitions 4 --replication-factor 1`
+** verify the topic with `./kafka-topics.sh --list --zookeeper $EXT_IP:2181` - you should see the topic you just created
+** put some messages on the topic
+----
+./kafka-console-producer.sh --broker-list $EXT_IP:9092 --topic testtopic
+----
+** type a few words separated with a `<return>` or newline
+** <ctrl>-c to exit
+** now we'll read the messages off the topic
+----
+./kafka-console-consumer.sh --zookeeper $EXT_IP:2181 --topic testtopic --from-beginning
+----
+** you should see your words from the previous step, though not in any particular order
+
+== TODO:
+** we're hard-coding that external-facing IP into the server.properties file - look at
+`https://github.com/wurstmeister/kafka-docker` for examples of how to take environment variables
+and writing them to `server.properties` at runtime.
+
+
+
+
+
+
+
