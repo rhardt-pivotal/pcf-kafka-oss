@@ -13,7 +13,8 @@ From here on, that IP will be referred to as `$EXT_IP`
 
 == Building
 ----
-sudo docker build -t rhardt/simple-docker-kafka
+cd <project root>
+sudo docker build -t rhardt/simple-docker-kafka .
 ----
 
 == Running
@@ -27,7 +28,7 @@ sudo docker run -p 2181:2181 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=$EXT_IP 
 
 == Testing
 * download
-** From your mac...
+** From another terminal window on your mac...
 ** download the _2.11-0.10.0.0_ version of kafka.  The exact version is _very important_.
 ** unzip and navigate to $KAFKA/bin
 ** `$EXT_IP=<your vm external ip>`
@@ -44,6 +45,9 @@ sudo docker run -p 2181:2181 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=$EXT_IP 
 ./kafka-console-consumer.sh --zookeeper $EXT_IP:2181 --topic topic1 --from-beginning
 ----
 ** you should see your words from the previous step, though not in any particular order
+
+== TROUBLESHOOTING
+* you can open a bash shell into the container and look at the contents of /var/log/supervisord for detailed logs from Kafka and Zookeeper
 
 == TODO:
 
