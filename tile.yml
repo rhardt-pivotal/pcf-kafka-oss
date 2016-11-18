@@ -53,5 +53,5 @@ packages:
       env_vars:
       - "KAFKA_LOG_DIRS=/kafka/kafka-logs"
       - "KAFKA_ZOOKEEPER_CONNECT=((.properties.kafka_host.value)):2181"
-      - "KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://((.properties.kafka_host.value)):9092
+      - "KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://((.properties.kafka_host.value)):9092"
       - "KAFKA_ADVERTISED_HOST_NAME=((.properties.kafka_host.value))"
