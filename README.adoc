@@ -17,24 +17,37 @@ cd <project root>
 sudo docker build -t rhardt/simple-docker-kafka .
 ----
 
+== Data Volume
+* Create a local directory to hold Kafka log data
+* This allows for persistent data across multiple container runs
+----
+mkdir -p ~/kafka/kafka-logs
+----
+
+
+
 == Running
 * From your ssh session into the VM:
 ----
 EXT_IP=<your vm external ip>
-sudo docker run -p 2181:2181 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=$EXT_IP -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://$EXT_IP:9092 -e KAFKA_CREATE_TOPICS=topic1:3:1,topic2:4:1,topic3:2:1 -e KAFKA_ZOOKEEPER_CONNECT=$EXT_IP:2181 rhardt/simple-docker-kafka
+
+sudo docker run -p 2181:2181 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=$EXT_IP \
+    -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://$EXT_IP:9092 -e KAFKA_CREATE_TOPICS=topic1:3:1,topic2:4:1,topic3:2:1 \
+    -e KAFKA_ZOOKEEPER_CONNECT=$EXT_IP:2181 -e KAFKA_LOG_DIRS=/kafka/kafka-logs  \
+    -v ~/kafka/kafka-logs:/kafka/kafka-logs  rhardt/simple-docker-kafka
 
 ----
-** at this point it should be running.  Now we test.
+
 
 == Testing
 * download
 ** From another terminal window on your mac...
 ** download the _2.11-0.10.0.0_ version of kafka.  The exact version is _very important_.
 ** unzip and navigate to $KAFKA/bin
-** `$EXT_IP=<your vm external ip>`
-** `./kafka-topics.sh --create --topic testtopic --zookeeper $EXT_IP:2181 --partitions 4 --replication-factor 1`
-** verify the topic with `./kafka-topics.sh --list --zookeeper $EXT_IP:2181` - you should see the topic you just created
-** put some messages on the topic
+**`$EXT_IP=<your vm external ip>`
+* `./kafka-topics.sh --create --topic testtopic --zookeeper $EXT_IP:2181 --partitions 4 --replication-factor 1`
+* verify the topic with `./kafka-topics.sh --list --zookeeper $EXT_IP:2181` - you should see the topic you just created
+* put some messages on the topic
 ----
 ./kafka-console-producer.sh --broker-list $EXT_IP:9092 --topic topic1
 ----
