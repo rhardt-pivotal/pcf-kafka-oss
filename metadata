@@ -1,0 +1,5 @@
+---
+opsmgr:
+  url: https://ops.your-company.com
+  username: webuser
+  password: webuserpass
