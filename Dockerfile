@@ -31,6 +31,9 @@ RUN mkdir /var/log/supervisord && \
     chmod 755 /var/log/supervisord
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
+#data volume
+VOLUME ["/kafka/kafka-logs"]
+
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181
 EXPOSE 9092
