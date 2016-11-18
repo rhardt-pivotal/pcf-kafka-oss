@@ -44,8 +44,13 @@ sudo docker run -p 2181:2181 -p 9092:9092 -e KAFKA_ADVERTISED_HOST_NAME=$EXT_IP 
 ** From another terminal window on your mac...
 ** download the _2.11-0.10.0.0_ version of kafka.  The exact version is _very important_.
 ** unzip and navigate to $KAFKA/bin
-**`$EXT_IP=<your vm external ip>`
-* `./kafka-topics.sh --create --topic testtopic --zookeeper $EXT_IP:2181 --partitions 4 --replication-factor 1`
+* create a topic
+----
+$EXT_IP=<your vm external ip>
+
+./kafka-topics.sh --create --topic testtopic --zookeeper $EXT_IP:2181 --partitions 4 --replication-factor 1
+----
+
 * verify the topic with `./kafka-topics.sh --list --zookeeper $EXT_IP:2181` - you should see the topic you just created
 * put some messages on the topic
 ----
