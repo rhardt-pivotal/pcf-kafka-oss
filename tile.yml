@@ -24,17 +24,17 @@ forms:
   label: Kafka Config
   description: Custom Properties for Kafka Service
   properties:
-  - name: kafka_host
-    type: string
-    label: Kafka Hostname
-    default: 'kafka.yourdomain.com'
-    description: Kafka Host - not ready feature, default value OK.  Actual host set automatically as BOSH VM IP.
+  - name: cluster_nodes
+    type: integer
+    label: Cluster Nodes
+    default: 3
+    description: Not yet implemented.  Eventually - the number of nodes in the cluster.
 
 packages:
 - name: kafka
   type: docker-bosh
   docker_images:
-  - bbertka/kafka
+  - rhardt/kafka 
   instance_type: 'c4.large'
   cpu: 2
   memory: 3840
@@ -44,14 +44,20 @@ packages:
   manifest: |
     containers:
     - name: kafka
-      image: "bbertka/kafka"
+      image: "rhardt/kafka"
       bind_ports:
       - '2181:2181'
       - '9092:9092'
       bind_volumes:
-      - "/kafka/kafka-logs"
+      - "/kafka"
       env_vars:
       - "KAFKA_LOG_DIRS=/kafka/kafka-logs"
-      - "KAFKA_ZOOKEEPER_CONNECT=((.properties.kafka_host.value)):2181"
-      - "KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://((.properties.kafka_host.value)):9092"
-      - "KAFKA_ADVERTISED_HOST_NAME=((.properties.kafka_host.value))"
+      - "KAFKA_ZOOKEEPER_CONNECT=(( .docker-bosh-kafka.first_ip )):2181"
+      - "KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://(( .docker-bosh-kafka.first_ip )):9092"
+      - "KAFKA_ADVERTISED_HOST_NAME=(( .docker-bosh-kafka.first_ip ))"
+- name: kafka-service-broker
+  type: app-broker
+  manifest:
+    host: kafka-service-broker
+    path: resources/kafka-service-broker-0.0.1-SNAPSHOT.jar
+    memory: 512mb

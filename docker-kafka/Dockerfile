@@ -18,6 +18,7 @@ RUN rm -rf /var/lib/apt/lists/* && \
     rm /tmp/kafka_"$SCALA_VERSION"-"$KAFKA_VERSION".tgz
 
 ADD server.properties /opt/kafka_2.11-0.10.0.0/config/server.properties
+ADD zookeeper.properties /opt/kafka_2.11-0.10.0.0/config/zookeeper.properties
 ADD ebs_kafka_start.sh /opt/kafka_2.11-0.10.0.0/bin/ebs_kafka_start.sh
 ADD wm_kafka_start.sh /opt/kafka_2.11-0.10.0.0/bin/wm_kafka_start.sh
 ADD wm_create_topics.sh /opt/kafka_2.11-0.10.0.0/bin/wm_create_topics.sh
@@ -32,7 +33,7 @@ RUN mkdir /var/log/supervisord && \
 ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 #data volume
-VOLUME ["/kafka/kafka-logs"]
+VOLUME ["/kafka"]
 
 # 2181 is zookeeper, 9092 is kafka
 EXPOSE 2181

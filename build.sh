@@ -1,3 +1,4 @@
+source /home/vcap/docker-bosh/tile-generator/bin/activate
 cd docker-kafka
 docker build -t rhardt/kafka:latest .
 cd ..

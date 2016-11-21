@@ -1,5 +1,5 @@
 ---
 opsmgr:
-  url: https://ops.your-company.com
-  username: webuser
-  password: webuserpass
+  url: https://opsman.yoursite.io
+  username: user
+  password: password
