@@ -1,0 +1,54 @@
+= PCF Ops Manager Tile for Kafka
+
+== Setup
+
+* clone this repo
+* initialize the sub-modules
+----
+cd pcf-kafka-oss
+git submodule init
+git submodule update
+----
+
+_The submodules consist of a standalone Kafka/Zookeeper Docker image and a basic Kafka Service Broker.
+Both can be used independently of this project_
+
+https://github.com/rhardt-pivotal/docker-kafka
+https://github.com/rhardt-pivotal/spring-cloud-cloudfoundry-service-broker
+
+* install the tile and pcf tools from http://cf-platform-eng.github.io/isv-portal/tile-generator/
+* install docker
+
+== Building
+* Build the service broker
+** `cd spring-cloud-cloudfoundry-service-broker`
+** `./gradlew clean build`
+* Build the tile
+** update the `metadata` file to point to your ops manager.
+** `sudo su`
+** `source <path to tile generator>/bin/activate`
+** `./build.sh`
+
+_This will build a docker image, cache it, create the necessary
+Bosh releases, build the tile, and upload it to Ops Manager where
+it will be listed in the 'Available Products' pane._
+
+== TROUBLESHOOTING
+
+== TODO:
+
+* multi-tenant with tls/Kerberos security
+
+* Single tenant using Dr. Nic's docker service broker
+
+
+== ACKNOWLEDGEMENTS
+
+* a team effort with https://github.com/bbertka-pivotal
+
+
+
+
+
+
+
