@@ -1,0 +1,4 @@
+[submodule "spring-cloud-cloudfoundry-service-broker"]
+	path = spring-cloud-cloudfoundry-service-broker
+	url = https://github.com/rhardt-pivotal/spring-cloud-cloudfoundry-service-broker.git
+	branch = kafka
